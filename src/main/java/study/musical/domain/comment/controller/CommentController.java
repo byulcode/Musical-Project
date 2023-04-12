@@ -34,6 +34,7 @@ public class CommentController {
 
     /**
      * 특정 뮤지컬에 해당하는 댓글 전체 조회
+     *
      * @param musicalId
      * @param pageable
      * @return
@@ -42,17 +43,48 @@ public class CommentController {
     public ResponseEntity<?> getCommentsPage(
             @PathVariable("musicalId") Long musicalId,
             @PageableDefault(size = 5) Pageable pageable
-            ) {
+    ) {
         Page<CommentResponseDto> commentResponseDtoPage = commentService.getMusicalCommentsPage(musicalId, pageable);
         return new ResponseEntity<>(commentResponseDtoPage, HttpStatus.OK);
     }
 
-    @PatchMapping("/comment/{id}")
+    /**
+     * 댓글 단건 조회
+     * @param id
+     * @return
+     */
+    @GetMapping("/comment/{id}")
+    public ResponseEntity<?> getCommentById(@PathVariable("id") Long id) {
+        CommentResponseDto commentResponseDto = commentService.getComment(id);
+        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+    }
+
+    /**
+     * 댓글 수정
+     *
+     * @param id
+     * @param commentRequestDto
+     * @return
+     */
+    @PutMapping("/comment/{id}")
     public ResponseEntity<?> modifyComment(
             @PathVariable("id") Long id,
             @RequestBody CommentRequestDto commentRequestDto
     ) {
+
         return new ResponseEntity<>(commentService.modifyComment(id, commentRequestDto), HttpStatus.OK);
+    }
+
+    /**
+     * 댓글 삭제
+     * @param id
+     * @return
+     */
+    @PatchMapping("/comment/{id}")
+    public ResponseEntity<?> deleteCoupon(@PathVariable("id") Long id) {
+        commentService.deleteComment(id);
+        CommentResponseDto commentResponseDto = commentService.deleteComment(id);
+        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
 
 }

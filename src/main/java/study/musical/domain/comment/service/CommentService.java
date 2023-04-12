@@ -40,6 +40,12 @@ public class CommentService {
         return CommentResponseDto.from(comment);
     }
 
+    @Transactional(readOnly = true)
+    public CommentResponseDto getComment(Long id) {
+        Comment comment = commentRepository.findById(id).orElseThrow();
+        return CommentResponseDto.from(comment);
+    }
+
     //뮤지컬에 달린 댓글 모두 불러오기
     @Transactional(readOnly = true)
     public Page<CommentResponseDto> getMusicalCommentsPage(Long musicalId, Pageable pageable) {
@@ -53,6 +59,14 @@ public class CommentService {
         Comment comment = commentRepository.findById(id).orElseThrow();
         comment.modifyComment(commentRequestDto.getContent());
         comment.setModifiedAt(LocalDateTime.now());
+        return CommentResponseDto.from(comment);
+    }
+
+    //댓글 삭제
+    @Transactional
+    public CommentResponseDto deleteComment(Long id) {
+        Comment comment = commentRepository.findById(id).orElseThrow();
+        comment.delete();
         return CommentResponseDto.from(comment);
     }
 }

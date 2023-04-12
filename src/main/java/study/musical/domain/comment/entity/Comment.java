@@ -4,8 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.DynamicUpdate;
 import study.musical.domain.comment.entity.enums.CommentStatus;
 import study.musical.domain.musical.entity.Musical;
 import study.musical.global.entity.BaseTimeEntity;
@@ -14,6 +13,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTimeEntity {
 
@@ -42,5 +42,9 @@ public class Comment extends BaseTimeEntity {
 
     public void modifyComment(String content) {
         this.content = content;
+    }
+
+    public void delete() {
+        this.commentStatus = CommentStatus.DELETED;
     }
 }
