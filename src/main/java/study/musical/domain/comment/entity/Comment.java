@@ -32,24 +32,15 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "musical_id")
     private Musical musical;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Builder
     public Comment(Long id, String content, CommentStatus commentStatus, Musical musical) {
         this.id = id;
         this.content = content;
         this.commentStatus = CommentStatus.REGISTERED;
         this.musical = musical;
+    }
+
+    public void modifyComment(String content) {
+        this.content = content;
     }
 }

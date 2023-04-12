@@ -7,7 +7,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import study.musical.domain.comment.entity.dto.request.CommentCreateRequest;
+import study.musical.domain.comment.entity.dto.request.CommentRequestDto;
 import study.musical.domain.comment.entity.dto.response.CommentResponseDto;
 import study.musical.domain.comment.service.CommentService;
 
@@ -27,7 +27,7 @@ public class CommentController {
     @PostMapping("/{musicalId}/comment")
     public ResponseEntity<?> createComment(
             @PathVariable("musicalId") Long musicalId,
-            @RequestBody CommentCreateRequest createRequest) {
+            @RequestBody CommentRequestDto createRequest) {
         CommentResponseDto commentResponseDto = commentService.createComment(musicalId, createRequest);
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
@@ -46,4 +46,13 @@ public class CommentController {
         Page<CommentResponseDto> commentResponseDtoPage = commentService.getMusicalCommentsPage(musicalId, pageable);
         return new ResponseEntity<>(commentResponseDtoPage, HttpStatus.OK);
     }
+
+    @PatchMapping("/comment/{id}")
+    public ResponseEntity<?> modifyComment(
+            @PathVariable("id") Long id,
+            @RequestBody CommentRequestDto commentRequestDto
+    ) {
+        return new ResponseEntity<>(commentService.modifyComment(id, commentRequestDto), HttpStatus.OK);
+    }
+
 }

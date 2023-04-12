@@ -28,4 +28,8 @@ public class BaseTimeEntity {
     private void setCreatedAt() {
         this.createdAt = LocalDateTime.now();
     }
+
+    public void setModifiedAt(LocalDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
 }
