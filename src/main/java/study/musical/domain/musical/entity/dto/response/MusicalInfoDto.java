@@ -9,7 +9,7 @@ import study.musical.domain.musical.entity.enums.PerfStatus;
 @Builder
 public class MusicalInfoDto {
 
-    private String title;
+    private final String title;
     private final PerfStatus perfStatus;
     private final String place;
     private final int likeCount;

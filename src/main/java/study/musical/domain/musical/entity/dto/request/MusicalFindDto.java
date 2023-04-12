@@ -11,8 +11,4 @@ public class MusicalFindDto {
     private String title;
     private PerfStatus perfStatus;
 
-    public MusicalFindDto(String title, PerfStatus perfStatus) {
-        this.title = title;
-        this.perfStatus = perfStatus;
-    }
 }
