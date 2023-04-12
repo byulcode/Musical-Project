@@ -8,9 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import study.musical.domain.musical.entity.dto.request.MusicalFindDto;
+import study.musical.domain.musical.entity.dto.response.MusicalDetailsDto;
 import study.musical.domain.musical.entity.dto.response.MusicalInfoDto;
 import study.musical.domain.musical.entity.enums.PerfStatus;
 import study.musical.domain.musical.service.MusicalService;
@@ -22,6 +24,13 @@ public class MusicalController {
 
     private final MusicalService musicalService;
 
+    /**
+     * 전체 뮤지컬 리스트
+     * @param title 제목으로 검색
+     * @param perfStatus 공연 상태로 검색
+     * @param pageable
+     * @return
+     */
     @GetMapping("/list")
     public ResponseEntity<Page<MusicalInfoDto>> getAllMusicalsPage(
             @RequestParam(value = "title", defaultValue = "", required = false) String title,
@@ -34,6 +43,13 @@ public class MusicalController {
                 .build();
         Page<MusicalInfoDto> musicalInfos = musicalService.getAllMusicalsPage(musicalFindDto, pageable);
         return new ResponseEntity<>(musicalInfos, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MusicalDetailsDto> getMusicalDetail(@PathVariable("id") Long id) {
+        MusicalDetailsDto musicalDetailsDto = musicalService.getMusicalDetailById(id);
+        return new ResponseEntity<>(musicalDetailsDto, HttpStatus.OK);
     }
 
 }

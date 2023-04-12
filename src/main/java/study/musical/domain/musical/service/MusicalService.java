@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.entity.dto.request.MusicalFindDto;
+import study.musical.domain.musical.entity.dto.response.MusicalDetailsDto;
 import study.musical.domain.musical.entity.dto.response.MusicalInfoDto;
 import study.musical.domain.musical.repository.MusicalRepository;
 
@@ -29,5 +30,10 @@ public class MusicalService {
         return musicalPage.map(MusicalInfoDto::from);
     }
 
+    @Transactional(readOnly = true)
+    public MusicalDetailsDto getMusicalDetailById(Long id) {
+        Musical musical = musicalRepository.findById(id).orElseThrow();
+        return MusicalDetailsDto.from(musical);
+    }
 
 }
