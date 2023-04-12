@@ -7,11 +7,11 @@ import study.musical.domain.comment.entity.Comment;
 
 @Getter
 @NoArgsConstructor
-public class CommentCreateRequest {
+public class CommentRequestDto {
 
     private String content;
     @Builder
-    public CommentCreateRequest(String content) {
+    public CommentRequestDto(String content) {
         this.content = content;
     }
 
