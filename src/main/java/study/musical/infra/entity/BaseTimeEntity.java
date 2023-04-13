@@ -1,4 +1,4 @@
-package study.musical.global.entity;
+package study.musical.infra.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
