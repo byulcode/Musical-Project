@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import study.musical.domain.comment.entity.enums.CommentStatus;
 import study.musical.domain.musical.entity.Musical;
-import study.musical.global.entity.BaseTimeEntity;
+import study.musical.infra.entity.BaseTimeEntity;
 
 import javax.persistence.*;
 

@@ -46,6 +46,11 @@ public class MusicalController {
     }
 
 
+    /**
+     * 뮤지컬 상세 보기
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     public ResponseEntity<MusicalDetailsDto> getMusicalDetail(@PathVariable("id") Long id) {
         MusicalDetailsDto musicalDetailsDto = musicalService.getMusicalDetailById(id);

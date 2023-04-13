@@ -1,4 +1,4 @@
-package study.musical.global.config;
+package study.musical.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;
