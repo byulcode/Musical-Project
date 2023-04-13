@@ -47,6 +47,6 @@ public class MusicalRepositoryCustomImpl implements MusicalRepositoryCustom{
     }
 
     private BooleanExpression titleEq(String title) {
-        return StringUtils.hasText(title) ? musical.title.eq(title) : null;
+        return StringUtils.hasText(title) ? musical.title.contains(title) : null;
     }
 }
