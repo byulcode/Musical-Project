@@ -10,8 +10,11 @@ import study.musical.domain.comment.entity.Comment;
 import study.musical.domain.comment.entity.dto.request.CommentRequestDto;
 import study.musical.domain.comment.entity.dto.response.CommentResponseDto;
 import study.musical.domain.comment.repository.CommentRepository;
+import study.musical.infra.exception.exceptions.CommentNotExistException;
+import study.musical.infra.exception.exceptions.MusicalNotExistException;
 import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.repository.MusicalRepository;
+import study.musical.infra.exception.ErrorCode;
 
 import java.time.LocalDateTime;
 
@@ -25,25 +28,25 @@ public class CommentService {
 
     //댓글 등록
     @Transactional
-    public CommentResponseDto createComment(Long musicalId, CommentRequestDto commentCreateRequest) {
-        Musical musical = musicalRepository.findById(musicalId).orElseThrow();
-        //만약 해당 뮤지컬이 존재한다면
-        log.info("musical : {}", musical);
+    public CommentResponseDto createComment(Long musicalId, CommentRequestDto commentRequestDto) {
+
+        Musical musical = musicalRepository.findById(musicalId).orElseThrow(() ->{
+            throw new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST);
+        });
 
         Comment comment = Comment.builder()
-                .content(commentCreateRequest.getContent())
+                .content(commentRequestDto.getContent())
                 .musical(musical)
                 .build();
 
         commentRepository.save(comment);
-
         return CommentResponseDto.from(comment);
     }
 
+    //댓글 단건 조회
     @Transactional(readOnly = true)
     public CommentResponseDto getComment(Long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow();
-        return CommentResponseDto.from(comment);
+        return CommentResponseDto.from(getCommentEntity(id));
     }
 
     //뮤지컬에 달린 댓글 모두 불러오기
@@ -56,7 +59,7 @@ public class CommentService {
     //댓글 수정
     @Transactional
     public CommentResponseDto modifyComment(Long id, CommentRequestDto commentRequestDto) {
-        Comment comment = commentRepository.findById(id).orElseThrow();
+        Comment comment = getCommentEntity(id);
         comment.modifyComment(commentRequestDto.getContent());
         comment.setModifiedAt(LocalDateTime.now());
         return CommentResponseDto.from(comment);
@@ -69,4 +72,11 @@ public class CommentService {
         comment.delete();
         return CommentResponseDto.from(comment);
     }
+
+    private Comment getCommentEntity(Long id) {
+        return commentRepository.findById(id).orElseThrow(() ->{
+            throw new CommentNotExistException(ErrorCode.COMMENT_NOT_EXIST);
+        });
+    }
+
 }

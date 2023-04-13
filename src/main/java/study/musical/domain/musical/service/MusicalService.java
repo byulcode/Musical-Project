@@ -10,6 +10,8 @@ import study.musical.domain.musical.entity.dto.request.MusicalFindDto;
 import study.musical.domain.musical.entity.dto.response.MusicalDetailsDto;
 import study.musical.domain.musical.entity.dto.response.MusicalInfoDto;
 import study.musical.domain.musical.repository.MusicalRepository;
+import study.musical.infra.exception.ErrorCode;
+import study.musical.infra.exception.exceptions.MusicalNotExistException;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +34,9 @@ public class MusicalService {
 
     @Transactional(readOnly = true)
     public MusicalDetailsDto getMusicalDetailById(Long id) {
-        Musical musical = musicalRepository.findById(id).orElseThrow();
+        Musical musical = musicalRepository.findById(id).orElseThrow(() ->{
+            throw new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST);
+        });
         return MusicalDetailsDto.from(musical);
     }
 
