@@ -1,9 +1,6 @@
 package study.musical.domain.musical.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import study.musical.domain.musical.entity.enums.PerfStatus;
 import study.musical.infra.entity.BaseTimeEntity;
 
@@ -15,6 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "musical")
+@ToString(exclude = "comments")
 public class Musical extends BaseTimeEntity {
 
     @Id
@@ -50,10 +48,10 @@ public class Musical extends BaseTimeEntity {
     private int likeCount;
 
     @OneToMany(mappedBy = "musical")
-    private List<Comment> comment;
+    private List<Comment> comments;
 
     @Builder
-    public Musical(Long id, String title, PerfStatus perfStatus, String runningTime, int basicPrice, Integer listPrice, String place, LocalDate startDate, LocalDate endDate, int likeCount, List<Comment> comment) {
+    public Musical(Long id, String title, PerfStatus perfStatus, String runningTime, int basicPrice, Integer listPrice, String place, LocalDate startDate, LocalDate endDate, int likeCount, List<Comment> comments) {
         this.id = id;
         this.title = title;
         this.perfStatus = perfStatus;
@@ -64,7 +62,7 @@ public class Musical extends BaseTimeEntity {
         this.startDate = startDate;
         this.endDate = endDate;
         this.likeCount = likeCount;
-        this.comment = comment;
+        this.comments = comments;
     }
 
 

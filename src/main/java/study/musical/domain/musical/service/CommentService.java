@@ -2,6 +2,7 @@ package study.musical.domain.musical.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,13 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final MusicalRepository musicalRepository;
+    private Logger log1;
 
     //댓글 등록
     @Transactional
-    public CommentResponseDto createComment(Long musicalId, CommentRequestDto commentRequestDto) {
-        log.info("Comment service createComment run");
-        Musical musical = musicalRepository.findById(musicalId).orElseThrow(() ->{
+    public void createComment(Long musicalId, CommentRequestDto commentRequestDto) {
+        log.info("Comment service createComment run..");
+        Musical musical = musicalRepository.findById(musicalId).orElseThrow(() -> {
             throw new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST);
         });
 
@@ -39,48 +41,54 @@ public class CommentService {
                 .musical(musical)
                 .build();
 
+        log.info("comment = {}", comment);
         commentRepository.save(comment);
-        return CommentResponseDto.from(comment);
     }
 
-    //댓글 단건 조회
-    @Transactional(readOnly = true)
-    public CommentResponseDto getComment(Long id) {
-        log.info("Comment service getComment run");
-        return CommentResponseDto.from(getCommentEntity(id));
-    }
 
     //뮤지컬에 달린 댓글 모두 불러오기
     @Transactional(readOnly = true)
-    public Page<CommentResponseDto> getMusicalCommentsPage(Long musicalId, Pageable pageable) {
+    public Page<CommentResponseDto> getCommentsByMusicalId(Long musicalId, Pageable pageable) {
         log.info("Comment service getMusicalCommentsPage run");
         Page<Comment> commentPage = commentRepository.findAllMusicalCommentsPage(musicalId, pageable);
         return commentPage.map(CommentResponseDto::from);
     }
 
+    //댓글 단건 조회
+    @Transactional(readOnly = true)
+    public CommentResponseDto getCommentById(Long musicalId, Long commentId) {
+        log.info("Comment service getComment run");
+        Comment comment = getCommentEntity(musicalId, commentId);
+        return CommentResponseDto.from(comment);
+    }
+
+
     //댓글 수정
     @Transactional
-    public CommentResponseDto modifyComment(Long id, CommentRequestDto commentRequestDto) {
-        log.info("Comment service modifyComment run");
-        Comment comment = getCommentEntity(id);
+    public void modifyComment(Long musicalId, Long commentId, CommentRequestDto commentRequestDto) {
+        log.info("Comment service modifyComment run..");
+        Comment comment = getCommentEntity(musicalId, commentId);
         comment.modifyComment(commentRequestDto.getContent());
+        log.info("modified comment : {}", comment);
         comment.setModifiedAt(LocalDateTime.now());
-        return CommentResponseDto.from(comment);
     }
 
     //댓글 삭제
     @Transactional
-    public CommentResponseDto deleteComment(Long id) {
+    public void deleteComment(Long musicalId, Long commentId) {
         log.info("Comment service deleteComment run");
-        Comment comment = commentRepository.findById(id).orElseThrow();
+        Comment comment = getCommentEntity(musicalId, commentId);
         comment.delete();
-        return CommentResponseDto.from(comment);
     }
 
-    private Comment getCommentEntity(Long id) {
-        return commentRepository.findById(id).orElseThrow(() ->{
+    private Comment getCommentEntity(Long musicalId, Long commentId) {
+        log.info("Comment Service get comment entity..");
+        Musical musical = musicalRepository.findById(musicalId)
+                .orElseThrow(() -> new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST));
+
+        return commentRepository.findById(commentId).orElseThrow(() -> {
             throw new CommentNotExistException(ErrorCode.COMMENT_NOT_EXIST);
         });
     }
-
 }
+

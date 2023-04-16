@@ -35,7 +35,9 @@ public class MusicalCommentsDto {
                 .startDate(musical.getStartDate())
                 .endDate(musical.getEndDate())
                 .likeCount(musical.getLikeCount())
-                .comments(musical.getComment().stream().map(CommentResponseDto::from).collect(Collectors.toList()))
+                .comments(musical.getComments().stream()
+                        .map(CommentResponseDto::from)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

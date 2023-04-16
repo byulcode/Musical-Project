@@ -1,12 +1,8 @@
 package study.musical.domain.musical.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import study.musical.domain.musical.entity.enums.CommentStatus;
-import study.musical.domain.musical.entity.Musical;
 import study.musical.infra.entity.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -15,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Comment extends BaseTimeEntity {
 
     @Id
@@ -29,7 +26,7 @@ public class Comment extends BaseTimeEntity {
     private CommentStatus commentStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "musical_id")
+    @JoinColumn(name = "musical_id", nullable = false)
     private Musical musical;
 
     @Builder

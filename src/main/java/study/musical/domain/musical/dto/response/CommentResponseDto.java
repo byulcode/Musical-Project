@@ -18,7 +18,6 @@ public class CommentResponseDto {
     private final LocalDateTime createdAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime modifiedAt;
-    private final Long musicalId;
 
     public static CommentResponseDto from(Comment comment) {
         return CommentResponseDto.builder()
@@ -26,7 +25,6 @@ public class CommentResponseDto {
                 .commentStatus(comment.getCommentStatus())
                 .createdAt(comment.getCreatedAt())
                 .modifiedAt(comment.getModifiedAt())
-                .musicalId(comment.getMusical().getId())
                 .build();
     }
 }

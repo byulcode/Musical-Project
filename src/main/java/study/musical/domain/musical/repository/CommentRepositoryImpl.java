@@ -10,7 +10,7 @@ import study.musical.domain.musical.entity.enums.CommentStatus;
 
 import java.util.List;
 
-import static study.musical.domain.comment.entity.QComment.comment;
+import static study.musical.domain.musical.entity.QComment.comment;
 import static study.musical.domain.musical.entity.QMusical.musical;
 
 public class CommentRepositoryImpl implements CommentRespositoryCustom{
