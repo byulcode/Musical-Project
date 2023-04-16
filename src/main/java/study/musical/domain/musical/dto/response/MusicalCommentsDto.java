@@ -1,8 +1,7 @@
-package study.musical.domain.musical.entity.dto.response;
+package study.musical.domain.musical.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import study.musical.domain.comment.entity.dto.response.CommentResponseDto;
 import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.entity.enums.PerfStatus;
 

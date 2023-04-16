@@ -1,10 +1,10 @@
-package study.musical.domain.comment.entity.dto.response;
+package study.musical.domain.musical.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
-import study.musical.domain.comment.entity.Comment;
-import study.musical.domain.comment.entity.enums.CommentStatus;
+import study.musical.domain.musical.entity.Comment;
+import study.musical.domain.musical.entity.enums.CommentStatus;
 
 import java.time.LocalDateTime;
 

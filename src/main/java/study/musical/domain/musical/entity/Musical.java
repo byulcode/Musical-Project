@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import study.musical.domain.comment.entity.Comment;
 import study.musical.domain.musical.entity.enums.PerfStatus;
 import study.musical.infra.entity.BaseTimeEntity;
 

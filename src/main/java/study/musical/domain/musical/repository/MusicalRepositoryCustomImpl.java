@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.StringUtils;
 import study.musical.domain.musical.entity.Musical;
-import study.musical.domain.musical.entity.dto.request.MusicalFindDto;
+import study.musical.domain.musical.dto.request.MusicalFindDto;
 import study.musical.domain.musical.entity.enums.PerfStatus;
 
 import java.util.List;
@@ -24,7 +24,9 @@ public class MusicalRepositoryCustomImpl implements MusicalRepositoryCustom{
     }
 
     @Override
-    public Page<Musical> findAllMusicalsPage(MusicalFindDto musicalFindDto, Pageable pageable) {
+    public Page<Musical> findAllMusicalsPage(MusicalFindDto musicalFindDto) {
+        Pageable pageable = musicalFindDto.getPageable();
+
         List<Musical> content = queryFactory
                 .selectFrom(musical)
                 .where(

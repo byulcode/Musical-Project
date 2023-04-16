@@ -1,11 +1,11 @@
-package study.musical.domain.comment.entity;
+package study.musical.domain.musical.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
-import study.musical.domain.comment.entity.enums.CommentStatus;
+import study.musical.domain.musical.entity.enums.CommentStatus;
 import study.musical.domain.musical.entity.Musical;
 import study.musical.infra.entity.BaseTimeEntity;
 

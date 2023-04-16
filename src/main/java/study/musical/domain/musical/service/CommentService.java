@@ -1,4 +1,4 @@
-package study.musical.domain.comment.service;
+package study.musical.domain.musical.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,10 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import study.musical.domain.comment.entity.Comment;
-import study.musical.domain.comment.entity.dto.request.CommentRequestDto;
-import study.musical.domain.comment.entity.dto.response.CommentResponseDto;
-import study.musical.domain.comment.repository.CommentRepository;
+import study.musical.domain.musical.entity.Comment;
+import study.musical.domain.musical.dto.request.CommentRequestDto;
+import study.musical.domain.musical.dto.response.CommentResponseDto;
+import study.musical.domain.musical.repository.CommentRepository;
 import study.musical.infra.exception.exceptions.CommentNotExistException;
 import study.musical.infra.exception.exceptions.MusicalNotExistException;
 import study.musical.domain.musical.entity.Musical;
@@ -29,7 +29,7 @@ public class CommentService {
     //댓글 등록
     @Transactional
     public CommentResponseDto createComment(Long musicalId, CommentRequestDto commentRequestDto) {
-
+        log.info("Comment service createComment run");
         Musical musical = musicalRepository.findById(musicalId).orElseThrow(() ->{
             throw new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST);
         });
@@ -46,12 +46,14 @@ public class CommentService {
     //댓글 단건 조회
     @Transactional(readOnly = true)
     public CommentResponseDto getComment(Long id) {
+        log.info("Comment service getComment run");
         return CommentResponseDto.from(getCommentEntity(id));
     }
 
     //뮤지컬에 달린 댓글 모두 불러오기
     @Transactional(readOnly = true)
     public Page<CommentResponseDto> getMusicalCommentsPage(Long musicalId, Pageable pageable) {
+        log.info("Comment service getMusicalCommentsPage run");
         Page<Comment> commentPage = commentRepository.findAllMusicalCommentsPage(musicalId, pageable);
         return commentPage.map(CommentResponseDto::from);
     }
@@ -59,6 +61,7 @@ public class CommentService {
     //댓글 수정
     @Transactional
     public CommentResponseDto modifyComment(Long id, CommentRequestDto commentRequestDto) {
+        log.info("Comment service modifyComment run");
         Comment comment = getCommentEntity(id);
         comment.modifyComment(commentRequestDto.getContent());
         comment.setModifiedAt(LocalDateTime.now());
@@ -68,6 +71,7 @@ public class CommentService {
     //댓글 삭제
     @Transactional
     public CommentResponseDto deleteComment(Long id) {
+        log.info("Comment service deleteComment run");
         Comment comment = commentRepository.findById(id).orElseThrow();
         comment.delete();
         return CommentResponseDto.from(comment);

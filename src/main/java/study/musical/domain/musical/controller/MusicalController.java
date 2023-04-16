@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import study.musical.domain.musical.entity.dto.request.MusicalFindDto;
-import study.musical.domain.musical.entity.dto.response.MusicalDetailsDto;
-import study.musical.domain.musical.entity.dto.response.MusicalInfoDto;
+import study.musical.domain.musical.dto.request.MusicalFindDto;
+import study.musical.domain.musical.dto.response.MusicalDetailsDto;
+import study.musical.domain.musical.dto.response.MusicalInfoDto;
 import study.musical.domain.musical.entity.enums.PerfStatus;
 import study.musical.domain.musical.service.MusicalService;
 

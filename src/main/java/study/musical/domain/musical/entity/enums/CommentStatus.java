@@ -1,4 +1,4 @@
-package study.musical.domain.comment.entity.enums;
+package study.musical.domain.musical.entity.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

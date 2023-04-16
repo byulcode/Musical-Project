@@ -1,16 +1,18 @@
-package study.musical.domain.comment.controller;
+package study.musical.domain.musical.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import study.musical.domain.comment.entity.dto.request.CommentRequestDto;
-import study.musical.domain.comment.entity.dto.response.CommentResponseDto;
-import study.musical.domain.comment.service.CommentService;
+import study.musical.domain.musical.dto.request.CommentRequestDto;
+import study.musical.domain.musical.dto.response.CommentResponseDto;
+import study.musical.domain.musical.service.CommentService;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/musical")
@@ -28,6 +30,7 @@ public class CommentController {
     public ResponseEntity<?> createComment(
             @PathVariable("musicalId") Long musicalId,
             @RequestBody CommentRequestDto createRequest) {
+        log.info("Comment controller createComment run");
         CommentResponseDto commentResponseDto = commentService.createComment(musicalId, createRequest);
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
@@ -44,6 +47,7 @@ public class CommentController {
             @PathVariable("musicalId") Long musicalId,
             @PageableDefault(size = 5) Pageable pageable
     ) {
+        log.info("Comment controller getCommentsPage run");
         Page<CommentResponseDto> commentResponseDtoPage = commentService.getMusicalCommentsPage(musicalId, pageable);
         return new ResponseEntity<>(commentResponseDtoPage, HttpStatus.OK);
     }
@@ -55,6 +59,7 @@ public class CommentController {
      */
     @GetMapping("/comment/{id}")
     public ResponseEntity<?> getCommentById(@PathVariable("id") Long id) {
+        log.info("Comment controller getCommentById run");
         CommentResponseDto commentResponseDto = commentService.getComment(id);
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
@@ -71,7 +76,7 @@ public class CommentController {
             @PathVariable("id") Long id,
             @RequestBody CommentRequestDto commentRequestDto
     ) {
-
+        log.info("Comment controller modifyComment run");
         return new ResponseEntity<>(commentService.modifyComment(id, commentRequestDto), HttpStatus.OK);
     }
 
@@ -81,7 +86,8 @@ public class CommentController {
      * @return
      */
     @PatchMapping("/comment/{id}")
-    public ResponseEntity<?> deleteCoupon(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteComment(@PathVariable("id") Long id) {
+        log.info("Comment controller deleteComment run");
         commentService.deleteComment(id);
         CommentResponseDto commentResponseDto = commentService.deleteComment(id);
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);

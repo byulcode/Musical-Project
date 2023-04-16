@@ -1,4 +1,4 @@
-package study.musical.domain.musical.entity.dto.response;
+package study.musical.domain.musical.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

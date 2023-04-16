@@ -1,12 +1,12 @@
-package study.musical.domain.comment.repository;
+package study.musical.domain.musical.repository;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
-import study.musical.domain.comment.entity.Comment;
-import study.musical.domain.comment.entity.enums.CommentStatus;
+import study.musical.domain.musical.entity.Comment;
+import study.musical.domain.musical.entity.enums.CommentStatus;
 
 import java.util.List;
 

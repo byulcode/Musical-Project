@@ -1,9 +1,9 @@
-package study.musical.domain.comment.entity.dto.request;
+package study.musical.domain.musical.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import study.musical.domain.comment.entity.Comment;
+import study.musical.domain.musical.entity.Comment;
 
 @Getter
 @NoArgsConstructor

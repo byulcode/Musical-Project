@@ -1,8 +1,8 @@
-package study.musical.domain.comment.repository;
+package study.musical.domain.musical.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import study.musical.domain.comment.entity.Comment;
+import study.musical.domain.musical.entity.Comment;
 
 public interface CommentRespositoryCustom {
 
