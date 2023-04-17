@@ -23,7 +23,7 @@ public class PageResponseDto<T> {
     // 페이지 목록 사이즈
     private int size;
     // 게시글 총 개수
-    private int totalCount;
+    private long totalCount;
     // 시작 페이지 번호, 끝 페이지 번호
     private int start, end;
     // 현재 페이지 기준 이전 페이지, 다음 페이지
@@ -60,7 +60,7 @@ public class PageResponseDto<T> {
                 .content(pageInfo.getContent())
                 .page(page)
                 .size(size)
-                .totalCount(pageInfo.getTotalPages())
+                .totalCount(pageInfo.getTotalElements())
                 .start(start)
                 .end(end)
                 .prev(prev)
