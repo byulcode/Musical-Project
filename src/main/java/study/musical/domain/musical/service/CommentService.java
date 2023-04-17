@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.musical.domain.musical.entity.Comment;
 import study.musical.domain.musical.dto.request.CommentRequestDto;
-import study.musical.domain.musical.dto.response.CommentResponseDto;
+import study.musical.domain.musical.dto.response.CommentDetailDto;
 import study.musical.domain.musical.repository.CommentRepository;
 import study.musical.infra.exception.exceptions.CommentNotExistException;
 import study.musical.infra.exception.exceptions.MusicalNotExistException;
@@ -48,18 +48,18 @@ public class CommentService {
 
     //뮤지컬에 달린 댓글 모두 불러오기
     @Transactional(readOnly = true)
-    public Page<CommentResponseDto> getCommentsByMusicalId(Long musicalId, Pageable pageable) {
+    public Page<CommentDetailDto> getCommentsByMusicalId(Long musicalId, Pageable pageable) {
         log.info("Comment service getMusicalCommentsPage run");
         Page<Comment> commentPage = commentRepository.findAllMusicalCommentsPage(musicalId, pageable);
-        return commentPage.map(CommentResponseDto::from);
+        return commentPage.map(CommentDetailDto::from);
     }
 
     //댓글 단건 조회
     @Transactional(readOnly = true)
-    public CommentResponseDto getCommentById(Long musicalId, Long commentId) {
+    public CommentDetailDto getCommentById(Long musicalId, Long commentId) {
         log.info("Comment service getComment run");
         Comment comment = getCommentEntity(musicalId, commentId);
-        return CommentResponseDto.from(comment);
+        return CommentDetailDto.from(comment);
     }
 
 

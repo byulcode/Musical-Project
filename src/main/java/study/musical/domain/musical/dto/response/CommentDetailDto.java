@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class CommentResponseDto {
+public class CommentDetailDto {
 
     private final String content;
     private final CommentStatus commentStatus;
@@ -19,8 +19,8 @@ public class CommentResponseDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime modifiedAt;
 
-    public static CommentResponseDto from(Comment comment) {
-        return CommentResponseDto.builder()
+    public static CommentDetailDto from(Comment comment) {
+        return CommentDetailDto.builder()
                 .content(comment.getContent())
                 .commentStatus(comment.getCommentStatus())
                 .createdAt(comment.getCreatedAt())

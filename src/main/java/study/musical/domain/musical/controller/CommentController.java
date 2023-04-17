@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import study.musical.domain.musical.dto.request.CommentRequestDto;
-import study.musical.domain.musical.dto.response.CommentResponseDto;
+import study.musical.domain.musical.dto.response.CommentDetailDto;
 import study.musical.domain.musical.service.CommentService;
 
 @Slf4j
@@ -24,7 +24,7 @@ public class CommentController {
      * 댓글 작성
      */
     @PostMapping("/{musicalId}/comments")
-    public ResponseEntity<CommentResponseDto> createComment(
+    public ResponseEntity<CommentDetailDto> createComment(
             @PathVariable("musicalId") Long musicalId,
             @RequestBody CommentRequestDto createRequest) {
         log.info("Comment controller createComment run");
@@ -41,7 +41,7 @@ public class CommentController {
             @PageableDefault(size = 5) Pageable pageable
     ) {
         log.info("Comment controller getCommentsByMusicalId run");
-        Page<CommentResponseDto> commentResponseDtoPage = commentService.getCommentsByMusicalId(musicalId, pageable);
+        Page<CommentDetailDto> commentResponseDtoPage = commentService.getCommentsByMusicalId(musicalId, pageable);
         return new ResponseEntity<>(commentResponseDtoPage, HttpStatus.OK);
     }
 
@@ -49,19 +49,19 @@ public class CommentController {
      * 댓글 단건 조회
      */
     @GetMapping("/{musicalId}/comments/{id}")
-    public ResponseEntity<CommentResponseDto> getCommentById(
+    public ResponseEntity<CommentDetailDto> getCommentById(
             @PathVariable Long musicalId,
             @PathVariable(value = "id") Long commentId) {
         log.info("Comment controller getCommentById run..");
-        CommentResponseDto commentResponseDto = commentService.getCommentById(musicalId, commentId);
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+        CommentDetailDto commentDetailDto = commentService.getCommentById(musicalId, commentId);
+        return new ResponseEntity<>(commentDetailDto, HttpStatus.OK);
     }
 
     /**
      * 댓글 수정
      */
     @PutMapping("/{musicalId}/comments/{id}")
-    public ResponseEntity<CommentResponseDto> modifyComment(
+    public ResponseEntity<CommentDetailDto> modifyComment(
             @PathVariable Long musicalId,
             @PathVariable("id") Long commentId,
             @RequestBody CommentRequestDto commentRequestDto

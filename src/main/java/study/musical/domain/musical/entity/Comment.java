@@ -30,7 +30,7 @@ public class Comment extends BaseTimeEntity {
     private Musical musical;
 
     @Builder
-    public Comment(Long id, String content, CommentStatus commentStatus, Musical musical) {
+    public Comment(Long id, String content, Musical musical) {
         this.id = id;
         this.content = content;
         this.commentStatus = CommentStatus.REGISTERED;
