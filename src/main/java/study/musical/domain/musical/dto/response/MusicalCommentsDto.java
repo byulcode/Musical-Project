@@ -22,7 +22,7 @@ public class MusicalCommentsDto {
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final int likeCount;
-    private final List<CommentResponseDto> comments;
+    private final List<CommentDetailDto> comments;
 
     public static MusicalCommentsDto from(Musical musical) {
         return MusicalCommentsDto.builder()
@@ -36,7 +36,7 @@ public class MusicalCommentsDto {
                 .endDate(musical.getEndDate())
                 .likeCount(musical.getLikeCount())
                 .comments(musical.getComments().stream()
-                        .map(CommentResponseDto::from)
+                        .map(CommentDetailDto::from)
                         .collect(Collectors.toList()))
                 .build();
     }
