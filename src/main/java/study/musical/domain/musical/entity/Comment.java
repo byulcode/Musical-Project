@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import study.musical.domain.musical.dto.request.CommentRequestDto;
 import study.musical.domain.musical.entity.enums.CommentStatus;
+import study.musical.domain.user.entity.Member;
 import study.musical.infra.entity.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -32,29 +33,27 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_status", nullable = false)
     private CommentStatus commentStatus;
 
+    @JoinColumn(name = "member_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Member member;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "musical_id", nullable = false)
     @ToString.Exclude
     private Musical musical;
 
-
     @OneToMany(mappedBy = "parentId", cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<Comment> childComments = new LinkedHashSet<>();
 
-    public void setChildComments(Set<Comment> childComments) {
-        this.childComments = childComments;
-    }
-
-    public void setMusical(Musical musical) {
-        this.musical = musical;
-    }
 
     @Builder
-    public Comment(Long parentId, String content, Musical musical, Set<Comment> childComments) {
+    public Comment(Long parentId, String content, Member member, Musical musical, Set<Comment> childComments) {
         this.parentId = parentId;
         this.content = content;
         this.commentStatus = CommentStatus.REGISTERED;
+        this.member = member;
         this.musical = musical;
         this.childComments = childComments;
     }
