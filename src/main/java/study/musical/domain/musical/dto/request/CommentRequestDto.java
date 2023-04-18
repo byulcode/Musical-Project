@@ -1,23 +1,17 @@
 package study.musical.domain.musical.dto.request;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import study.musical.domain.musical.entity.Comment;
+import lombok.ToString;
 
 @Getter
-@NoArgsConstructor
+@ToString
 public class CommentRequestDto {
 
+    private Long parentId;
     private String content;
-    @Builder
-    public CommentRequestDto(String content) {
-        this.content = content;
-    }
 
-    public Comment toEntity() {
-        return Comment.builder()
-                .content(content)
-                .build();
+    public CommentRequestDto(Long parentId, String content) {
+        this.parentId = parentId;
+        this.content = content;
     }
 }

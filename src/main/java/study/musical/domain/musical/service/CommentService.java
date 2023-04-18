@@ -2,20 +2,20 @@ package study.musical.domain.musical.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import study.musical.domain.musical.entity.Comment;
+import org.springframework.util.ObjectUtils;
 import study.musical.domain.musical.dto.request.CommentRequestDto;
 import study.musical.domain.musical.dto.response.CommentDetailDto;
-import study.musical.domain.musical.repository.CommentRepository;
-import study.musical.infra.exception.exceptions.CommentNotExistException;
-import study.musical.infra.exception.exceptions.MusicalNotExistException;
+import study.musical.domain.musical.entity.Comment;
 import study.musical.domain.musical.entity.Musical;
+import study.musical.domain.musical.repository.CommentRepository;
 import study.musical.domain.musical.repository.MusicalRepository;
 import study.musical.infra.exception.ErrorCode;
+import study.musical.infra.exception.exceptions.CommentNotExistException;
+import study.musical.infra.exception.exceptions.MusicalNotExistException;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +26,6 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final MusicalRepository musicalRepository;
-    private Logger log1;
 
     //댓글 등록
     @Transactional
@@ -35,12 +34,18 @@ public class CommentService {
         Musical musical = musicalRepository.findById(musicalId).orElseThrow(() -> {
             throw new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST);
         });
+        Comment parentComment = null;
+        if (!ObjectUtils.isEmpty(commentRequestDto.getParentId())) {
+            parentComment = commentRepository.findById(commentRequestDto.getParentId())
+                    .orElseThrow(() -> new CommentNotExistException(ErrorCode.COMMENT_NOT_EXIST));
+            log.info("parentComment = {}", parentComment);
+        }
 
-        Comment comment = Comment.builder()
-                .content(commentRequestDto.getContent())
-                .musical(musical)
-                .build();
+        Comment comment = Comment.of(commentRequestDto, musical);
 
+        if (parentComment != null) {
+            parentComment.addChildComment(comment);
+        }
         log.info("comment = {}", comment);
         commentRepository.save(comment);
     }
