@@ -15,10 +15,10 @@ public class LikeCustomRepositoryImpl implements LikeCustomRepository{
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
-    public Optional<Likes> exist(Long musicalId, Long memberId) {
+    public Optional<Likes> exist(Long musicalId, String email) {
         Likes pLike = jpaQueryFactory
                 .selectFrom(likes)
-                .where(likes.member.id.eq(memberId),
+                .where(likes.member.email.eq(email),
                         likes.musical.id.eq(musicalId))
                 .fetchFirst();
         return Optional.ofNullable(pLike);

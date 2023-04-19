@@ -26,23 +26,23 @@ public class LikeService {
 
     //좋아요 누르기 및 좋아요 취소
     @Transactional
-    public void pushLikeButton(Long musicalId, Long memberId) {
+    public void pushLikeButton(Long musicalId, String email) {
         log.info("Like service pushLikeButton run..");
-        likeRepository.exist(musicalId, memberId)
+        likeRepository.exist(musicalId, email)
                 .ifPresentOrElse(
-                        like -> likeRepository.deleteLikesByMemberIdAndMusicalId(memberId, musicalId),
+                        like -> likeRepository.deleteLikesByMemberEmailAndMusicalId(email, musicalId),
                         () -> {
                             Musical musical = getMusical(musicalId);
-                            Member member = memberRepository.findById(memberId).orElseThrow();
+                            Member member = memberRepository.findByEmail(email).orElseThrow();
                             likeRepository.save(new Likes(member, musical));
                         });
     }
 
     //사용자가 해당 뮤지컬에 좋아요를 눌렀는지 여부
     @Transactional(readOnly = true)
-    public boolean checkPushedLike(Long musicalId, Long memberId) {
+    public boolean checkPushedLike(Long musicalId, String email) {
         log.info("Like service checkPushedLike run..");
-        return likeRepository.exist(musicalId, memberId)
+        return likeRepository.exist(musicalId, email)
                 .isPresent();
     }
 

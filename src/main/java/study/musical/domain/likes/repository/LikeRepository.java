@@ -5,5 +5,5 @@ import study.musical.domain.likes.entity.Likes;
 
 public interface LikeRepository extends JpaRepository<Likes, Long>, LikeCustomRepository {
 
-    void deleteLikesByMemberIdAndMusicalId(Long memberId, Long musicalId);
+    void deleteLikesByMemberEmailAndMusicalId(String email, Long musicalId);
 }

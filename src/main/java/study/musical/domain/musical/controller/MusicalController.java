@@ -68,10 +68,10 @@ public class MusicalController {
     @PostMapping("/{id}")
     public ResponseEntity<?> pushLikeBtn(
             @PathVariable Long id,
-            @RequestParam Long memberId
+            @RequestParam String email
     ) {
         log.info("Musical controller pushLikeBtn run..");
-        likeService.pushLikeButton(id, memberId);
+        likeService.pushLikeButton(id, email);
         return ResponseEntity.ok(null);
     }
 
