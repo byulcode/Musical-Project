@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface LikeCustomRepository {
 
-    Optional<Likes> exist(Long memberId, Long musicalId);
+    Optional<Likes> exist(Long musicalId, Long memberId);
 
     long findMusicalLikeCnt(Long musicalId);
 }

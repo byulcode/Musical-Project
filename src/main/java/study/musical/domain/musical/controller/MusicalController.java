@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import study.musical.domain.likes.service.LikeService;
 import study.musical.domain.musical.dto.request.MusicalCreateReqDto;
 import study.musical.domain.musical.dto.request.MusicalFindDto;
 import study.musical.domain.musical.dto.request.MusicalModifyReqDto;
@@ -23,6 +24,7 @@ import study.musical.infra.utils.pagination.PageResponseDto;
 public class MusicalController {
 
     private final MusicalService musicalService;
+    private final LikeService likeService;
 
     /**
      * 전체 뮤지컬 리스트
@@ -59,6 +61,20 @@ public class MusicalController {
         MusicalDetailsDto musicalDetailsDto = musicalService.getMusicalDetailById(id);
         return new ResponseEntity<>(musicalDetailsDto, HttpStatus.OK);
     }
+
+    /**
+     * 좋아요 누르기
+     */
+    @PostMapping("/{id}")
+    public ResponseEntity<?> pushLikeBtn(
+            @PathVariable Long id,
+            @RequestParam Long memberId
+    ) {
+        log.info("Musical controller pushLikeBtn run..");
+        likeService.pushLikeButton(id, memberId);
+        return ResponseEntity.ok(null);
+    }
+
 
     /**
      * 뮤지컬 등록

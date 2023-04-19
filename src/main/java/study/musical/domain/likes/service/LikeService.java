@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import study.musical.domain.likes.dto.MusicalLikeReqDto;
 import study.musical.domain.likes.entity.Likes;
 import study.musical.domain.likes.repository.LikeRepository;
+import study.musical.domain.member.entity.Member;
+import study.musical.domain.member.repository.MemberRepository;
 import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.repository.MusicalRepository;
 import study.musical.infra.exception.ErrorCode;
@@ -19,27 +21,28 @@ public class LikeService {
 
     private final LikeRepository likeRepository;
     private final MusicalRepository musicalRepository;
+    private final MemberRepository memberRepository;
 
 
     //좋아요 누르기 및 좋아요 취소
     @Transactional
-    public Boolean pushLikeButton(MusicalLikeReqDto musicalLikeReqDto) {
+    public void pushLikeButton(Long musicalId, Long memberId) {
         log.info("Like service pushLikeButton run..");
-        likeRepository.exist(musicalLikeReqDto.getMember().getId(), musicalLikeReqDto.getMusicalId())
+        likeRepository.exist(musicalId, memberId)
                 .ifPresentOrElse(
-                        like -> likeRepository.deleteById(musicalLikeReqDto.getMusicalId()),
+                        like -> likeRepository.deleteLikesByMemberIdAndMusicalId(memberId, musicalId),
                         () -> {
-                            Musical musical = getMusical(musicalLikeReqDto);
-                            likeRepository.save(new Likes(musicalLikeReqDto.getMember(), musical));
+                            Musical musical = getMusical(musicalId);
+                            Member member = memberRepository.findById(memberId).orElseThrow();
+                            likeRepository.save(new Likes(member, musical));
                         });
-        return true;
     }
 
     //사용자가 해당 뮤지컬에 좋아요를 눌렀는지 여부
     @Transactional(readOnly = true)
-    public boolean checkPushedLike(MusicalLikeReqDto musicalLikeReqDto) {
+    public boolean checkPushedLike(Long musicalId, Long memberId) {
         log.info("Like service checkPushedLike run..");
-        return likeRepository.exist(musicalLikeReqDto.getMember().getId(), musicalLikeReqDto.getMusicalId())
+        return likeRepository.exist(musicalId, memberId)
                 .isPresent();
     }
 
@@ -51,8 +54,8 @@ public class LikeService {
     }
 
     @Transactional(readOnly = true)
-    public Musical getMusical(MusicalLikeReqDto musicalLikeReqDto) {
-        return musicalRepository.findById(musicalLikeReqDto.getMusicalId())
+    public Musical getMusical(Long musicalId) {
+        return musicalRepository.findById(musicalId)
                 .orElseThrow(() -> new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST));
     }
 }

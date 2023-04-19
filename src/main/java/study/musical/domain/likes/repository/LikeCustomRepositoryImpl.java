@@ -15,7 +15,7 @@ public class LikeCustomRepositoryImpl implements LikeCustomRepository{
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
-    public Optional<Likes> exist(Long memberId, Long musicalId) {
+    public Optional<Likes> exist(Long musicalId, Long memberId) {
         Likes pLike = jpaQueryFactory
                 .selectFrom(likes)
                 .where(likes.member.id.eq(memberId),
