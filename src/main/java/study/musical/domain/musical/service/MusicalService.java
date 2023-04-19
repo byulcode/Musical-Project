@@ -64,7 +64,6 @@ public class MusicalService {
         log.info("Modified Musical : {}", musical);
     }
 
-
     private Musical getMusicalEntity(Long musicalId) {
         return musicalRepository.findById(musicalId).orElseThrow(() -> {
             throw new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST);

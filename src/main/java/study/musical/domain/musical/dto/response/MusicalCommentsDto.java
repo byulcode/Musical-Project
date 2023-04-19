@@ -18,10 +18,8 @@ public class MusicalCommentsDto {
     private final PerfStatus perfStatus;
     private final String runningTime;
     private final int basicPrice;
-    private final String place;
     private final LocalDate startDate;
     private final LocalDate endDate;
-    private final int likeCount;
     private final List<CommentDetailDto> comments;
 
     public static MusicalCommentsDto from(Musical musical) {
@@ -31,10 +29,8 @@ public class MusicalCommentsDto {
                 .perfStatus(musical.getPerfStatus())
                 .runningTime(musical.getRunningTime())
                 .basicPrice(musical.getBasicPrice())
-                .place(musical.getPlace())
                 .startDate(musical.getStartDate())
                 .endDate(musical.getEndDate())
-                .likeCount(musical.getLikeCount())
                 .comments(musical.getComments().stream()
                         .map(CommentDetailDto::from)
                         .collect(Collectors.toList()))

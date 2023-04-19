@@ -7,15 +7,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.StringUtils;
-import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.dto.request.MusicalFindDto;
+import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.entity.enums.PerfStatus;
 
 import java.util.List;
 
+import static study.musical.domain.likes.entity.QLikes.likes;
 import static study.musical.domain.musical.entity.QMusical.musical;
 
-public class MusicalRepositoryCustomImpl implements MusicalRepositoryCustom{
+public class MusicalRepositoryCustomImpl implements MusicalRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
@@ -29,10 +30,12 @@ public class MusicalRepositoryCustomImpl implements MusicalRepositoryCustom{
 
         List<Musical> content = queryFactory
                 .selectFrom(musical)
+                .leftJoin(musical.likes, likes)
                 .where(
-                        statusEq(musicalFindDto.getPerfStatus()),
-                        titleEq(musicalFindDto.getTitle()))
-                .orderBy(musical.likeCount.desc())
+                        titleEq(musicalFindDto.getTitle()),
+                        statusEq(musicalFindDto.getPerfStatus())
+                )
+                .orderBy(musical.likes.size().desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -40,7 +43,8 @@ public class MusicalRepositoryCustomImpl implements MusicalRepositoryCustom{
         JPAQuery<Musical> countQuery = queryFactory
                 .selectFrom(musical)
                 .where(statusEq(musicalFindDto.getPerfStatus()),
-                        titleEq(musicalFindDto.getTitle()));
+                        titleEq(musicalFindDto.getTitle())
+                );
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
 

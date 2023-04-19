@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import study.musical.domain.member.entity.Member;
+import study.musical.domain.member.repository.MemberRepository;
 import study.musical.domain.musical.dto.request.CommentRequestDto;
 import study.musical.domain.musical.dto.response.CommentDetailDto;
 import study.musical.domain.musical.entity.Comment;
@@ -26,6 +28,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final MusicalRepository musicalRepository;
+    private final MemberRepository memberRepository;
 
     //댓글 등록
     @Transactional
@@ -34,6 +37,14 @@ public class CommentService {
         Musical musical = musicalRepository.findById(musicalId).orElseThrow(() -> {
             throw new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST);
         });
+
+        // 테스트용. 삭제 필요
+        int i = 1;
+        Long l = (long) i;
+        Member member = memberRepository.findById(l).orElseThrow(); //테스트용
+
+
+
         Comment parentComment = null;
         if (!ObjectUtils.isEmpty(commentRequestDto.getParentId())) {
             parentComment = commentRepository.findById(commentRequestDto.getParentId())
@@ -41,7 +52,7 @@ public class CommentService {
             log.info("parentComment = {}", parentComment);
         }
 
-        Comment comment = Comment.of(commentRequestDto, musical);
+        Comment comment = Comment.of(commentRequestDto, musical, member);
 
         if (parentComment != null) {
             parentComment.addChildComment(comment);

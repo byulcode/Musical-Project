@@ -14,6 +14,8 @@ public class CommentDetailDto {
 
     private final String content;
     private final CommentStatus commentStatus;
+    private final String email;
+    private final Long musicalId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime createdAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
@@ -23,6 +25,8 @@ public class CommentDetailDto {
         return CommentDetailDto.builder()
                 .content(comment.getContent())
                 .commentStatus(comment.getCommentStatus())
+                .email(comment.getMember().getEmail())
+                .musicalId(comment.getMusical().getId())
                 .createdAt(comment.getCreatedAt())
                 .modifiedAt(comment.getModifiedAt())
                 .build();

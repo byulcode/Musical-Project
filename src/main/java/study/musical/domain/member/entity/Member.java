@@ -1,12 +1,11 @@
-package study.musical.domain.user.entity;
+package study.musical.domain.member.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import study.musical.domain.likes.entity.Likes;
 import study.musical.infra.entity.BaseTimeEntity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -24,11 +23,16 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, length = 100)
     private String password;
 
+    @OneToMany(mappedBy = "member")
+    @ToString.Exclude
+    private Set<Likes> likes;
+
     @Builder
-    public Member(Long id, String name, String email, String password) {
+    public Member(Long id, String name, String email, String password, Set<Likes> likes) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.likes = likes;
     }
 }

@@ -11,15 +11,13 @@ public class MusicalInfoDto {
 
     private final String title;
     private final PerfStatus perfStatus;
-    private final String place;
-    private final int likeCount;
+    private final int likeCnt;
 
     public static MusicalInfoDto from(Musical musical) {
         return MusicalInfoDto.builder()
                 .title(musical.getTitle())
                 .perfStatus(musical.getPerfStatus())
-                .place(musical.getPlace())
-                .likeCount(musical.getLikeCount())
+                .likeCnt(musical.getLikes().size())
                 .build();
     }
 }

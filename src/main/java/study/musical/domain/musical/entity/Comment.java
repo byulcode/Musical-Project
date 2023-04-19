@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import study.musical.domain.musical.dto.request.CommentRequestDto;
 import study.musical.domain.musical.entity.enums.CommentStatus;
-import study.musical.domain.user.entity.Member;
+import study.musical.domain.member.entity.Member;
 import study.musical.infra.entity.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -58,10 +58,11 @@ public class Comment extends BaseTimeEntity {
         this.childComments = childComments;
     }
 
-    public static Comment of(CommentRequestDto requestDto, Musical musical) {
+    public static Comment of(CommentRequestDto requestDto, Musical musical, Member member) {
         return Comment.builder()
                 .content(requestDto.getContent())
                 .musical(musical)
+                .member(member)
                 .build();
     }
 
