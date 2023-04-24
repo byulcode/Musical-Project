@@ -62,7 +62,7 @@ public class MusicalRepositoryCustomImpl implements MusicalRepositoryCustom {
     public List<Musical> findAllMusicalsLiked(Set<Likes> likesSet) {
         return queryFactory
                 .selectFrom(musical)
-                .leftJoin(musical.likes, likes)
+                .leftJoin(musical.likes, likes).fetchJoin()
                 .where(likes.in(likesSet))
                 .fetch();
     }

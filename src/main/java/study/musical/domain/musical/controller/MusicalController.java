@@ -17,6 +17,8 @@ import study.musical.domain.musical.entity.enums.PerfStatus;
 import study.musical.domain.musical.service.MusicalService;
 import study.musical.infra.utils.pagination.PageResponseDto;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -75,6 +77,13 @@ public class MusicalController {
         return ResponseEntity.ok(null);
     }
 
+    //멤버가 좋아요한 뮤지컬 목록 조회
+    @GetMapping("/member/{id}/like/list")
+    public ResponseEntity<?> getAllMemberLikeList(@PathVariable Long id) {
+        log.info("Musical control getAllMemberLikeList run..");
+        List<MusicalInfoDto> musicalInfoDtoList = musicalService.getAllMusicalsLiked(id);
+        return new ResponseEntity<>(musicalInfoDtoList, HttpStatus.OK);
+    }
 
     /**
      * 뮤지컬 등록
