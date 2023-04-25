@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import study.musical.domain.musical.entity.Comment;
-import study.musical.domain.musical.entity.enums.CommentStatus;
+import study.musical.domain.musical.entity.enums.Status;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class CommentRepositoryImpl implements CommentRespositoryCustom{
                 .selectFrom(comment)
                 .join(comment.musical, musical).fetchJoin()
                 .where(
-                        comment.commentStatus.eq(CommentStatus.REGISTERED),
+                        comment.commentStatus.eq(Status.REGISTERED),
                         musical.id.eq(musicalId)
                 )
                 .offset(pageable.getOffset())
@@ -38,7 +38,7 @@ public class CommentRepositoryImpl implements CommentRespositoryCustom{
                 .selectFrom(comment)
                 .join(comment.musical, musical).fetchJoin()
                 .where(
-                        comment.commentStatus.eq(CommentStatus.REGISTERED),
+                        comment.commentStatus.eq(Status.REGISTERED),
                         musical.id.eq(musicalId)
                 );
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);

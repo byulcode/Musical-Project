@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import study.musical.domain.member.entity.Member;
 
 @Getter
 @ToString
@@ -13,12 +12,12 @@ public class CommentRequestDto {
 
     private Long parentId;
     private String content;
-    private Member member;
+    private String email;
 
-    public CommentRequestDto(Long parentId, String content, Member member) {
+    public CommentRequestDto(Long parentId, String content, String email) {
         this.parentId = parentId;
         this.content = content;
-        this.member = member;
+        this.email = email;
     }
 
 }

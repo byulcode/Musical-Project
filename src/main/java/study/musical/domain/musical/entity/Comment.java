@@ -2,9 +2,9 @@ package study.musical.domain.musical.entity;
 
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-import study.musical.domain.musical.dto.request.CommentRequestDto;
-import study.musical.domain.musical.entity.enums.CommentStatus;
 import study.musical.domain.member.entity.Member;
+import study.musical.domain.musical.dto.request.CommentRequestDto;
+import study.musical.domain.musical.entity.enums.Status;
 import study.musical.infra.entity.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -31,7 +31,7 @@ public class Comment extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "comment_status", nullable = false)
-    private CommentStatus commentStatus;
+    private Status status;
 
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,7 +52,7 @@ public class Comment extends BaseTimeEntity {
     public Comment(Long parentId, String content, Member member, Musical musical, Set<Comment> childComments) {
         this.parentId = parentId;
         this.content = content;
-        this.commentStatus = CommentStatus.REGISTERED;
+        this.status = Status.REGISTERED;
         this.member = member;
         this.musical = musical;
         this.childComments = childComments;
@@ -77,6 +77,6 @@ public class Comment extends BaseTimeEntity {
     }
 
     public void delete() {
-        this.commentStatus = CommentStatus.DELETED;
+        this.status = Status.DELETED;
     }
 }
