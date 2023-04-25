@@ -14,7 +14,9 @@ import study.musical.domain.musical.dto.request.MusicalFindDto;
 import study.musical.domain.musical.dto.request.MusicalModifyReqDto;
 import study.musical.domain.musical.dto.response.MusicalDetailsDto;
 import study.musical.domain.musical.dto.response.MusicalInfoDto;
+import study.musical.domain.musical.entity.Comment;
 import study.musical.domain.musical.entity.Musical;
+import study.musical.domain.musical.repository.CommentRepository;
 import study.musical.domain.musical.repository.MusicalRepository;
 import study.musical.infra.exception.ErrorCode;
 import study.musical.infra.exception.exceptions.MusicalNotExistException;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class MusicalService {
+    private final CommentRepository commentRepository;
 
     private final MusicalRepository musicalRepository;
     private final MemberRepository memberRepository;
@@ -86,6 +89,19 @@ public class MusicalService {
         Musical musical = getMusicalEntity(musicalId);
         musical.modify(reqDto);
         log.info("Modified Musical : {}", musical);
+    }
+
+    /**
+     * 뮤지컬 삭제
+     */
+    @Transactional
+    public void deleteMusical(Long musicalId) {
+        log.info("Musical service deleteMusical run..");
+        Musical musical = getMusicalEntity(musicalId);
+        musical.delete();
+        List<Comment> commentList = commentRepository.findCommentsByMusicalId(musicalId);
+        commentList.forEach(Comment::delete);
+        likeRepository.deleteLikesByMusicalId(musicalId);
     }
 
     private Musical getMusicalEntity(Long musicalId) {

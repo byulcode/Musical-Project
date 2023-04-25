@@ -38,12 +38,11 @@ public class MusicalController {
     @GetMapping("/list")
     public ResponseEntity<?> getAllMusicalsPage(
             @RequestParam(value = "title", defaultValue = "", required = false) String title,
-            @RequestParam(value = "perfStatus", defaultValue = "", required = false) String perfStatus,
-            MusicalFindDto findDto
+            @RequestParam(value = "perfStatus", defaultValue = "", required = false) String perfStatus
     ) {
         log.info("Musical controller getAllMusicalPage run..");
 
-        findDto = MusicalFindDto.builder()
+        MusicalFindDto findDto = MusicalFindDto.builder()
                 .title(title)
                 .perfStatus(perfStatus.equals("") ? null : PerfStatus.valueOf(perfStatus))
                 .build();
@@ -100,6 +99,7 @@ public class MusicalController {
 
     /**
      * 뮤지컬 수정
+     *
      * @param id
      * @param reqDto
      * @return
@@ -113,4 +113,13 @@ public class MusicalController {
         return ResponseEntity.ok(null);
     }
 
+    /**
+     * 뮤지컬 삭제
+     */
+    @PatchMapping("{id}")
+    public ResponseEntity<?> deleteMusical(@PathVariable Long id) {
+        log.info("Musical controller deleteMusical run..");
+        musicalService.deleteMusical(id);
+        return new ResponseEntity<>("Musical delete successfully", HttpStatus.OK);
+    }
 }

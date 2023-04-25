@@ -15,4 +15,6 @@ public interface LikeRepository extends JpaRepository<Likes, Long> {
     Optional<Likes> findByMusicalAndMember(Musical musical, Member member);
 
     Optional<Set<Likes>> findAllByMember(Member member);
+
+    void deleteLikesByMusicalId(Long musicalId);
 }

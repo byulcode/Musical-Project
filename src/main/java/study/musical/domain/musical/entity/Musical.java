@@ -4,6 +4,7 @@ import lombok.*;
 import study.musical.domain.likes.entity.Likes;
 import study.musical.domain.musical.dto.request.MusicalModifyReqDto;
 import study.musical.domain.musical.entity.enums.PerfStatus;
+import study.musical.domain.musical.entity.enums.Status;
 import study.musical.infra.entity.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -20,6 +21,10 @@ public class Musical extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "musical_status", nullable = false)
+    private Status status;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -63,6 +68,7 @@ public class Musical extends BaseTimeEntity {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.status = Status.REGISTERED;
         this.perfStatus = PerfStatus.UPCOMING;
         this.runningTime = runningTime;
         this.basicPrice = basicPrice;
@@ -82,5 +88,7 @@ public class Musical extends BaseTimeEntity {
         this.endDate = updateDto.getEndDate();
     }
 
-
+    public void delete() {
+        this.status = Status.DELETED;
+    }
 }
