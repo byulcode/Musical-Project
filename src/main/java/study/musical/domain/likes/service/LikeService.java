@@ -10,10 +10,7 @@ import study.musical.domain.member.entity.Member;
 import study.musical.domain.member.repository.MemberRepository;
 import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.repository.MusicalRepository;
-import study.musical.infra.exception.ErrorCode;
-import study.musical.infra.exception.exceptions.MusicalNotExistException;
-
-import java.util.Set;
+import study.musical.infra.exception.exceptions.ResourceNotFoundException;
 
 @Slf4j
 @Service
@@ -43,7 +40,7 @@ public class LikeService {
 
     private Musical getMusical(Long musicalId) {
         return musicalRepository.findById(musicalId)
-                .orElseThrow(() -> new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST));
+                .orElseThrow(() -> new ResourceNotFoundException("Musical", "id", musicalId));
     }
 
     private Member getMemberByEmail(String email) {

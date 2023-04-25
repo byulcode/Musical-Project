@@ -3,6 +3,7 @@ package study.musical.domain.musical.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.musical.domain.likes.entity.Likes;
@@ -18,8 +19,8 @@ import study.musical.domain.musical.entity.Comment;
 import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.repository.CommentRepository;
 import study.musical.domain.musical.repository.MusicalRepository;
-import study.musical.infra.exception.ErrorCode;
-import study.musical.infra.exception.exceptions.MusicalNotExistException;
+import study.musical.infra.exception.exceptions.MusicalApiException;
+import study.musical.infra.exception.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.Set;
@@ -66,7 +67,8 @@ public class MusicalService {
     }
 
     private Set<Likes> getLikes(Member member) {
-        return likeRepository.findAllByMember(member).orElseThrow();
+        return likeRepository.findAllByMember(member)
+                .orElseThrow(() -> new MusicalApiException(HttpStatus.BAD_REQUEST, "해당 멤버가 좋아요한 뮤지컬이 없습니다."));
     }
 
     /**
@@ -105,9 +107,8 @@ public class MusicalService {
     }
 
     private Musical getMusicalEntity(Long musicalId) {
-        return musicalRepository.findById(musicalId).orElseThrow(() -> {
-            throw new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST);
-        });
+        return musicalRepository.findById(musicalId)
+                .orElseThrow(() -> new ResourceNotFoundException("Musical", "id", musicalId));
     }
 
 }
