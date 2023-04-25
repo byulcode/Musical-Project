@@ -17,6 +17,8 @@ import study.musical.domain.musical.entity.enums.PerfStatus;
 import study.musical.domain.musical.service.MusicalService;
 import study.musical.infra.utils.pagination.PageResponseDto;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -36,12 +38,11 @@ public class MusicalController {
     @GetMapping("/list")
     public ResponseEntity<?> getAllMusicalsPage(
             @RequestParam(value = "title", defaultValue = "", required = false) String title,
-            @RequestParam(value = "perfStatus", defaultValue = "", required = false) String perfStatus,
-            MusicalFindDto findDto
+            @RequestParam(value = "perfStatus", defaultValue = "", required = false) String perfStatus
     ) {
         log.info("Musical controller getAllMusicalPage run..");
 
-        findDto = MusicalFindDto.builder()
+        MusicalFindDto findDto = MusicalFindDto.builder()
                 .title(title)
                 .perfStatus(perfStatus.equals("") ? null : PerfStatus.valueOf(perfStatus))
                 .build();
@@ -75,6 +76,13 @@ public class MusicalController {
         return ResponseEntity.ok(null);
     }
 
+    //멤버가 좋아요한 뮤지컬 목록 조회
+    @GetMapping("/member/{id}/like/list")
+    public ResponseEntity<?> getAllMemberLikeList(@PathVariable Long id) {
+        log.info("Musical control getAllMemberLikeList run..");
+        List<MusicalInfoDto> musicalInfoDtoList = musicalService.getAllMusicalsLiked(id);
+        return new ResponseEntity<>(musicalInfoDtoList, HttpStatus.OK);
+    }
 
     /**
      * 뮤지컬 등록
@@ -91,6 +99,7 @@ public class MusicalController {
 
     /**
      * 뮤지컬 수정
+     *
      * @param id
      * @param reqDto
      * @return
@@ -104,4 +113,13 @@ public class MusicalController {
         return ResponseEntity.ok(null);
     }
 
+    /**
+     * 뮤지컬 삭제
+     */
+    @PatchMapping("{id}")
+    public ResponseEntity<?> deleteMusical(@PathVariable Long id) {
+        log.info("Musical controller deleteMusical run..");
+        musicalService.deleteMusical(id);
+        return new ResponseEntity<>("Musical delete successfully", HttpStatus.OK);
+    }
 }

@@ -16,10 +16,8 @@ import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.repository.CommentRepository;
 import study.musical.domain.musical.repository.MusicalRepository;
 import study.musical.infra.exception.ErrorCode;
-import study.musical.infra.exception.exceptions.CommentNotExistException;
-import study.musical.infra.exception.exceptions.MusicalNotExistException;
-
-import java.time.LocalDateTime;
+import study.musical.infra.exception.exceptions.MusicalApiException;
+import study.musical.infra.exception.exceptions.ResourceNotFoundException;
 
 @Service
 @Slf4j
@@ -34,21 +32,18 @@ public class CommentService {
     @Transactional
     public void createComment(Long musicalId, CommentRequestDto commentRequestDto) {
         log.info("Comment service createComment run..");
-        Musical musical = musicalRepository.findById(musicalId).orElseThrow(() -> {
-            throw new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST);
-        });
+        Musical musical = musicalRepository.findById(musicalId)
+                .orElseThrow(() -> new ResourceNotFoundException("Musical", "id", musicalId));
 
         // 테스트용. 삭제 필요
-        int i = 1;
-        Long l = (long) i;
+        Long l = 1L;
         Member member = memberRepository.findById(l).orElseThrow(); //테스트용
-
 
 
         Comment parentComment = null;
         if (!ObjectUtils.isEmpty(commentRequestDto.getParentId())) {
             parentComment = commentRepository.findById(commentRequestDto.getParentId())
-                    .orElseThrow(() -> new CommentNotExistException(ErrorCode.COMMENT_NOT_EXIST));
+                    .orElseThrow(() -> new ResourceNotFoundException("Comment", "id", commentRequestDto.getParentId()));
             log.info("parentComment = {}", parentComment);
         }
 
@@ -86,7 +81,6 @@ public class CommentService {
         Comment comment = getCommentEntity(musicalId, commentId);
         comment.modifyComment(commentRequestDto.getContent());
         log.info("modified comment : {}", comment);
-        comment.setModifiedAt(LocalDateTime.now());
     }
 
     //댓글 삭제
@@ -100,11 +94,15 @@ public class CommentService {
     private Comment getCommentEntity(Long musicalId, Long commentId) {
         log.info("Comment Service get comment entity..");
         Musical musical = musicalRepository.findById(musicalId)
-                .orElseThrow(() -> new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST));
+                .orElseThrow(() -> new ResourceNotFoundException("Musical", "id", musicalId));
 
-        return commentRepository.findById(commentId).orElseThrow(() -> {
-            throw new CommentNotExistException(ErrorCode.COMMENT_NOT_EXIST);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
+            throw new ResourceNotFoundException("Comment", "id", commentId);
         });
+        if (!comment.getMusical().getId().equals(musical.getId())) {
+            throw new MusicalApiException(ErrorCode.NO_TARGET);
+        }
+        return comment;
     }
 }
 

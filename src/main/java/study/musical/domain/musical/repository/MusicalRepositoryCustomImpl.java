@@ -7,11 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.StringUtils;
+import study.musical.domain.likes.entity.Likes;
 import study.musical.domain.musical.dto.request.MusicalFindDto;
 import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.entity.enums.PerfStatus;
 
 import java.util.List;
+import java.util.Set;
 
 import static study.musical.domain.likes.entity.QLikes.likes;
 import static study.musical.domain.musical.entity.QMusical.musical;
@@ -55,4 +57,15 @@ public class MusicalRepositoryCustomImpl implements MusicalRepositoryCustom {
     private BooleanExpression titleEq(String title) {
         return StringUtils.hasText(title) ? musical.title.contains(title) : null;
     }
+
+
+    public List<Musical> findAllMusicalsLiked(Set<Likes> likesSet) {
+        return queryFactory
+                .selectFrom(musical)
+                .leftJoin(musical.likes, likes).fetchJoin()
+                .where(likes.in(likesSet))
+                .fetch();
+    }
 }
+
+

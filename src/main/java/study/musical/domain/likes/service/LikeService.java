@@ -10,8 +10,7 @@ import study.musical.domain.member.entity.Member;
 import study.musical.domain.member.repository.MemberRepository;
 import study.musical.domain.musical.entity.Musical;
 import study.musical.domain.musical.repository.MusicalRepository;
-import study.musical.infra.exception.ErrorCode;
-import study.musical.infra.exception.exceptions.MusicalNotExistException;
+import study.musical.infra.exception.exceptions.ResourceNotFoundException;
 
 @Slf4j
 @Service
@@ -26,9 +25,11 @@ public class LikeService {
     //좋아요 누르기 및 좋아요 취소
     @Transactional
     public void pushLikeButton(Long musicalId, String email) {
+        log.info("Likes service pushLikeButton run..");
         Musical musical = getMusical(musicalId);
         Member member = getMemberByEmail(email);
-
+        log.info("musical : {}", musical);
+        log.info("member : {}", member);
         likeRepository.findByMusicalAndMember(musical, member)
                 .ifPresentOrElse(
                         like -> likeRepository.deleteLikesByMusicalAndMember(musical, member),
@@ -39,7 +40,7 @@ public class LikeService {
 
     private Musical getMusical(Long musicalId) {
         return musicalRepository.findById(musicalId)
-                .orElseThrow(() -> new MusicalNotExistException(ErrorCode.MUSICAL_NOT_EXIST));
+                .orElseThrow(() -> new ResourceNotFoundException("Musical", "id", musicalId));
     }
 
     private Member getMemberByEmail(String email) {

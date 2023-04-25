@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>, CommentRespositoryCustom {
 
-    List<Comment> findByMusicalId(Long musicalId);
+    List<Comment> findCommentsByMusicalId(Long musicalId);
 }

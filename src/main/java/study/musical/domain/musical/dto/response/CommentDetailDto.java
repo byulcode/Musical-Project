@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import study.musical.domain.musical.entity.Comment;
-import study.musical.domain.musical.entity.enums.CommentStatus;
+import study.musical.domain.musical.entity.enums.Status;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class CommentDetailDto {
 
     private final String content;
-    private final CommentStatus commentStatus;
+    private final Status status;
     private final String email;
     private final Long musicalId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
@@ -24,7 +24,7 @@ public class CommentDetailDto {
     public static CommentDetailDto from(Comment comment) {
         return CommentDetailDto.builder()
                 .content(comment.getContent())
-                .commentStatus(comment.getCommentStatus())
+                .status(comment.getStatus())
                 .email(comment.getMember().getEmail())
                 .musicalId(comment.getMusical().getId())
                 .createdAt(comment.getCreatedAt())
