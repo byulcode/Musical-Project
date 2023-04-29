@@ -8,19 +8,36 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/musical_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+#    url: jdbc:mysql://localhost:3306/musical_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/musical_db?useSSL=false&serverTimezone=Asia/Seoul
     username: mu
     password: 1234
 
+#
+#  jpa:             # JPA - DB 테이블 연동x
+#    show-sql: true # JPA SQL문 확인 가능(기본 true)
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
+#    open-in-view: false
+#    properties:
+#      hibernate:
+#        ddl-auto: create
+#        format_sql: true # SQL문 가독성을 높여주는 설정(기본 true)
 
-  jpa:             # JPA - DB 테이블 연동x
-    show-sql: true # JPA SQL문 확인 가능(기본 true)
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+  jpa:
     open-in-view: false
+    hibernate:
+      ddl-auto: create
     properties:
       hibernate:
-        format_sql: true # SQL문 가독성을 높여주는 설정(기본 true)
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+
 
 logging:
   level:
     org.hibernate.SQL: info
+
+
+jwt:
+  secret: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Iuq5gO2VmOuCmCIsImlhdCI6MTUxNjIzOTAyMn0.EmGx1kHcq53QBygxGCoBRllce6-E2ODx22NVznk4VbE
