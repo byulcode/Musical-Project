@@ -5,9 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import study.musical.domain.likes.service.LikeService;
+import study.musical.domain.member.dto.PrincipalDetails;
 import study.musical.domain.musical.dto.request.MusicalCreateReqDto;
 import study.musical.domain.musical.dto.request.MusicalFindDto;
 import study.musical.domain.musical.dto.request.MusicalModifyReqDto;
@@ -87,12 +90,15 @@ public class MusicalController {
     /**
      * 뮤지컬 등록
      *
-     * @param reqDto
-     * @return
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ResponseEntity<MusicalDetailsDto> createMusical(@RequestBody MusicalCreateReqDto reqDto) {
+    public ResponseEntity<MusicalDetailsDto> createMusical(
+            @RequestBody MusicalCreateReqDto reqDto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("Musical controller createMusical run..");
+        log.info("createMusical principalDetails: {}", principalDetails);
+
         musicalService.createMusical(reqDto);
         return new ResponseEntity<>(null, HttpStatus.CREATED);
     }

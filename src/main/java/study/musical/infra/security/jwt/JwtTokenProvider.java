@@ -1,6 +1,8 @@
 package study.musical.infra.security.jwt;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,16 +12,22 @@ import org.springframework.stereotype.Component;
 import study.musical.domain.member.entity.Member;
 import study.musical.infra.exception.exceptions.MusicalApiException;
 
+import java.security.Key;
 import java.util.Date;
 @Slf4j
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+    private final Key key;
 
+    public JwtTokenProvider( @Value("${jwt.secret}")String secretKey) {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+    }
     @Value("${jwt.token-validity-in-mils}")
     private int jwtExpirationInMs;
+
+
 
     //access token 생성
     public String generateToken(Authentication authentication) {
@@ -33,7 +41,7 @@ public class JwtTokenProvider {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -46,14 +54,14 @@ public class JwtTokenProvider {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
     // token으로부터 username 가져오기
     public String getUsernameFromJWT(String token) {
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(jwtSecret).build()
+                .setSigningKey(key).build()
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -63,7 +71,7 @@ public class JwtTokenProvider {
     // jwt token 유효성 검증
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (SignatureException ex) {
             throw new MusicalApiException(HttpStatus.BAD_REQUEST, "Invalid JWT Signature");

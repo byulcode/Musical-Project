@@ -40,5 +40,5 @@ logging:
 
 
 jwt:
-  secret: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Iuq5gO2VmOuCmCIsImlhdCI6MTUxNjIzOTAyMn0.EmGx1kHcq53QBygxGCoBRllce6-E2ODx22NVznk4VbE
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   token-validity-in-mils: 3600000   # 1 hour

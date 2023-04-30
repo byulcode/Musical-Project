@@ -10,6 +10,7 @@ import java.util.Set;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 @Table(name = "member")
 public class Member extends BaseTimeEntity {
 
