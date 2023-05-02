@@ -46,8 +46,8 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthResponseDto(token));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerMember(@RequestBody SignUpDto signUpDto) {
+    @PostMapping("/signup/admin")
+    public ResponseEntity<?> registerAdmin(@RequestBody SignUpDto signUpDto) {
         if (memberRepository.existsByName(signUpDto.getName())) {
             return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
         }
@@ -56,13 +56,35 @@ public class AuthController {
             return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }
 
-        // create user object
-        // test role : admin
+        // create member object
         Member member = Member.builder()
                 .name(signUpDto.getName())
                 .email(signUpDto.getEmail())
                 .password(passwordEncoderUtils.encodePassword(signUpDto.getPassword()))
                 .role(Member.RoleType.ADMIN)
+                .build();
+
+        memberRepository.save(member);
+
+        return new ResponseEntity<>("Member registered successfully!", HttpStatus.OK);
+    }
+
+    @PostMapping("/signup/user")
+    public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto) {
+        if (memberRepository.existsByName(signUpDto.getName())) {
+            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
+        }
+
+        if (memberRepository.existsByEmail(signUpDto.getEmail())) {
+            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+        }
+
+        // create member object
+        Member member = Member.builder()
+                .name(signUpDto.getName())
+                .email(signUpDto.getEmail())
+                .password(passwordEncoderUtils.encodePassword(signUpDto.getPassword()))
+                .role(Member.RoleType.USER)
                 .build();
 
         memberRepository.save(member);
