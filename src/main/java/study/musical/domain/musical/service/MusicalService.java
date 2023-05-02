@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import study.musical.domain.likes.entity.Likes;
 import study.musical.domain.likes.repository.LikeRepository;
 import study.musical.domain.member.entity.Member;
-import study.musical.domain.member.repository.MemberRepository;
 import study.musical.domain.musical.dto.request.MusicalCreateReqDto;
 import study.musical.domain.musical.dto.request.MusicalFindDto;
 import study.musical.domain.musical.dto.request.MusicalModifyReqDto;
@@ -33,7 +32,6 @@ public class MusicalService {
     private final CommentRepository commentRepository;
 
     private final MusicalRepository musicalRepository;
-    private final MemberRepository memberRepository;
     private final LikeRepository likeRepository;
 
     /**
@@ -58,15 +56,15 @@ public class MusicalService {
 
     //해당 멤버가 좋아요한 뮤지컬 목록
     @Transactional(readOnly = true)
-    public List<MusicalInfoDto> getAllMusicalsLiked(Long id) {
+    public List<MusicalInfoDto> getAllMusicalsLiked(Member member) {
         log.info("Musical service getAllMusicalsLiked run..");
-        Member member = memberRepository.findById(id).orElseThrow();
         List<Musical> musicalList = musicalRepository.findAllMusicalsLiked(getLikes(member));
         log.info("getLikes num : {}", getLikes(member).size());
         return musicalList.stream().map(MusicalInfoDto::from).collect(Collectors.toList());
     }
 
-    private Set<Likes> getLikes(Member member) {
+    @Transactional
+    public Set<Likes> getLikes(Member member) {
         return likeRepository.findAllByMember(member)
                 .orElseThrow(() -> new MusicalApiException(HttpStatus.BAD_REQUEST, "해당 멤버가 좋아요한 뮤지컬이 없습니다."));
     }

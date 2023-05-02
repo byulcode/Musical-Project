@@ -71,19 +71,20 @@ public class MusicalController {
      */
     @PostMapping("/{id}")
     public ResponseEntity<?> pushLikeBtn(
-            @PathVariable Long id,
-            @RequestParam String email
+            @PathVariable("id") Long musicalId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
         log.info("Musical controller pushLikeBtn run..");
-        likeService.pushLikeButton(id, email);
+        likeService.pushLikeButton(musicalId, principalDetails.getMember().getEmail());
         return ResponseEntity.ok(null);
     }
 
     //멤버가 좋아요한 뮤지컬 목록 조회
-    @GetMapping("/member/{id}/like/list")
-    public ResponseEntity<?> getAllMemberLikeList(@PathVariable Long id) {
+    @GetMapping("/member/like/list")
+    public ResponseEntity<?> getAllMemberLikeList(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("Musical control getAllMemberLikeList run..");
-        List<MusicalInfoDto> musicalInfoDtoList = musicalService.getAllMusicalsLiked(id);
+        List<MusicalInfoDto> musicalInfoDtoList = musicalService.getAllMusicalsLiked(principalDetails.getMember());
         return new ResponseEntity<>(musicalInfoDtoList, HttpStatus.OK);
     }
 
@@ -110,11 +111,14 @@ public class MusicalController {
      * @param reqDto
      * @return
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("{id}")
     public ResponseEntity<MusicalDetailsDto> modifyMusical(
             @PathVariable Long id,
-            @RequestBody MusicalModifyReqDto reqDto) {
+            @RequestBody MusicalModifyReqDto reqDto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("Musical controller modifyMusical run..");
+        log.info("modifyMusical principalDetails: {}", principalDetails);
         musicalService.modifyMusical(id, reqDto);
         return ResponseEntity.ok(null);
     }
@@ -122,9 +126,13 @@ public class MusicalController {
     /**
      * 뮤지컬 삭제
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("{id}")
-    public ResponseEntity<?> deleteMusical(@PathVariable Long id) {
+    public ResponseEntity<?> deleteMusical(
+            @PathVariable Long id,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("Musical controller deleteMusical run..");
+        log.info("deleteMusical principalDetails: {}", principalDetails);
         musicalService.deleteMusical(id);
         return new ResponseEntity<>("Musical delete successfully", HttpStatus.OK);
     }
