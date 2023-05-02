@@ -27,7 +27,7 @@ public class CommentRepositoryImpl implements CommentRespositoryCustom{
                 .selectFrom(comment)
                 .join(comment.musical, musical).fetchJoin()
                 .where(
-                        comment.commentStatus.eq(Status.REGISTERED),
+                        comment.status.eq(Status.REGISTERED),
                         musical.id.eq(musicalId)
                 )
                 .offset(pageable.getOffset())
@@ -38,7 +38,7 @@ public class CommentRepositoryImpl implements CommentRespositoryCustom{
                 .selectFrom(comment)
                 .join(comment.musical, musical).fetchJoin()
                 .where(
-                        comment.commentStatus.eq(Status.REGISTERED),
+                        comment.status.eq(Status.REGISTERED),
                         musical.id.eq(musicalId)
                 );
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);

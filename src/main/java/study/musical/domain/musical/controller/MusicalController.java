@@ -5,9 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import study.musical.domain.likes.service.LikeService;
+import study.musical.domain.member.dto.PrincipalDetails;
 import study.musical.domain.musical.dto.request.MusicalCreateReqDto;
 import study.musical.domain.musical.dto.request.MusicalFindDto;
 import study.musical.domain.musical.dto.request.MusicalModifyReqDto;
@@ -68,31 +71,35 @@ public class MusicalController {
      */
     @PostMapping("/{id}")
     public ResponseEntity<?> pushLikeBtn(
-            @PathVariable Long id,
-            @RequestParam String email
+            @PathVariable("id") Long musicalId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
         log.info("Musical controller pushLikeBtn run..");
-        likeService.pushLikeButton(id, email);
+        likeService.pushLikeButton(musicalId, principalDetails.getMember().getEmail());
         return ResponseEntity.ok(null);
     }
 
     //멤버가 좋아요한 뮤지컬 목록 조회
-    @GetMapping("/member/{id}/like/list")
-    public ResponseEntity<?> getAllMemberLikeList(@PathVariable Long id) {
+    @GetMapping("/member/like/list")
+    public ResponseEntity<?> getAllMemberLikeList(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("Musical control getAllMemberLikeList run..");
-        List<MusicalInfoDto> musicalInfoDtoList = musicalService.getAllMusicalsLiked(id);
+        List<MusicalInfoDto> musicalInfoDtoList = musicalService.getAllMusicalsLiked(principalDetails.getMember());
         return new ResponseEntity<>(musicalInfoDtoList, HttpStatus.OK);
     }
 
     /**
      * 뮤지컬 등록
      *
-     * @param reqDto
-     * @return
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ResponseEntity<MusicalDetailsDto> createMusical(@RequestBody MusicalCreateReqDto reqDto) {
+    public ResponseEntity<MusicalDetailsDto> createMusical(
+            @RequestBody MusicalCreateReqDto reqDto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("Musical controller createMusical run..");
+        log.info("createMusical principalDetails: {}", principalDetails);
+
         musicalService.createMusical(reqDto);
         return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
@@ -104,11 +111,14 @@ public class MusicalController {
      * @param reqDto
      * @return
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("{id}")
     public ResponseEntity<MusicalDetailsDto> modifyMusical(
             @PathVariable Long id,
-            @RequestBody MusicalModifyReqDto reqDto) {
+            @RequestBody MusicalModifyReqDto reqDto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("Musical controller modifyMusical run..");
+        log.info("modifyMusical principalDetails: {}", principalDetails);
         musicalService.modifyMusical(id, reqDto);
         return ResponseEntity.ok(null);
     }
@@ -116,9 +126,13 @@ public class MusicalController {
     /**
      * 뮤지컬 삭제
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("{id}")
-    public ResponseEntity<?> deleteMusical(@PathVariable Long id) {
+    public ResponseEntity<?> deleteMusical(
+            @PathVariable Long id,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         log.info("Musical controller deleteMusical run..");
+        log.info("deleteMusical principalDetails: {}", principalDetails);
         musicalService.deleteMusical(id);
         return new ResponseEntity<>("Musical delete successfully", HttpStatus.OK);
     }
