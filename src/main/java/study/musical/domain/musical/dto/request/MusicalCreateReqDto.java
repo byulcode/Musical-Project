@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import study.musical.domain.musical.entity.Musical;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Getter
@@ -13,11 +14,22 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class MusicalCreateReqDto {
 
+    @NotBlank(message = "제목을 입력해주세요")
     private String title;
+
+    @NotBlank(message = "내용을 입력해 주세요")
     private String content;
+
+    @NotBlank(message = "러닝타임을 입력해주세요")
     private String runningTime;
+
+    @NotBlank
     private int basicPrice;
+
+    @NotBlank
     private LocalDate startDate;
+
+    @NotBlank
     private LocalDate endDate;
 
     @Builder
