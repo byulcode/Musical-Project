@@ -10,9 +10,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import study.musical.infra.security.jwt.JwtAuthenticationEntryPoint;
@@ -44,6 +43,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/musicals/**").permitAll()
                 .antMatchers("/api/auth/**", "/test").permitAll()
                 .anyRequest().authenticated();
+
         //jwt 필터를 usernamepassword 인증 전에 실행
         http
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -56,6 +56,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/swagger-ui/**","/swagger/**");
     }
 
 }
