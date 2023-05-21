@@ -8,8 +8,8 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/musical_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    url: jdbc:mysql://localhost:3306/musical_db?useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/musical_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+#    url: jdbc:mysql://localhost:3306/musical_db?useSSL=false&serverTimezone=Asia/Seoul
     username: mu
     password: 1234
 
