@@ -3,25 +3,14 @@ server:
 
 spring:
   mvc:
-    pathmatch:
+    path match:
       matching-strategy: ant_path_matcher  # swagger2 문서 오류 때문에
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/musical_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-#    url: jdbc:mysql://localhost:3306/musical_db?useSSL=false&serverTimezone=Asia/Seoul
-    username: mu
-    password: 1234
-
-#
-#  jpa:             # JPA - DB 테이블 연동x
-#    show-sql: true # JPA SQL문 확인 가능(기본 true)
-#    database-platform: org.hibernate.dialect.MySQL8Dialect
-#    open-in-view: false
-#    properties:
-#      hibernate:
-#        ddl-auto: create
-#        format_sql: true # SQL문 가독성을 높여주는 설정(기본 true)
+    url: jdbc:mysql://localhost:3307/musical?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root1234!
 
   jpa:
     open-in-view: false
